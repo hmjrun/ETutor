@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zenglan.etutor.dao.UserDao">
+	<insert id="insertUser" useGeneratedKeys="true" keyProperty="userId" parameterType="com.zenglan.etutor.entity.UserProfile">
+		insert ignore into user_profile(user_name,passwaord,role,state)
+		values (#{userName},
+				#{passwaord},
+				#{role},
+				0)
+	</insert>
+	
+	<update id="activeUser">
+		update
+			user_profile
+		set 
+			state = 1
+		where user_id = #{userId}
+	</update>
+	
+	<insert id="insetStudent" useGeneratedKeys="true" keyProperty="studentId" parameterType="com.zenglan.etutor.entity.Student">
+		insert ignore into student(student_name,student_number,studennt_info,user_profile_id,tutor_id)
+		values (#{studentName},
+				#{studentNumber},
+				#{studentInfo},
+				#{user.userId},
+				#{tutorId})
+	</insert>
+	
+	<insert id="insetTutor" useGeneratedKeys="true" keyProperty="tutorId" parameterType="com.zenglan.etutor.entity.Tutor">
+		insert ignore into tutor(tutor_name,tutor_number,tutor_title,tutor_info,user_profile_id)
+		values (#{tutorName},
+				#{tutorNumber},
+				#{tutorTitle},
+				#{tutorInfo},
+				#{user.userId})
+	</insert>
+	
+	<select id="login" parameterType="com.zenglan.etutor.entity.UserProfile"  resultType="com.zenglan.etutor.entity.UserProfile">  
+            select user_id,user_name,passwaord,role,state from user_profile where user_name=#{userName} and passwaord=#{passwaord} and state=1
+    </select> 
+	
+</mapper>
